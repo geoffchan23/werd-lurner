@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import WordLister from './WordLister'
+import ListSelector from './ListSelector'
+import './App.scss'
 
 function App() {
+  const [currentList, setCurrentList] = useState(undefined)
+
+  function handleListComplete() {
+    setCurrentList(undefined)
+  }
+
+  function handleListSelection(selectedList) {
+    setCurrentList(selectedList)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      { !currentList && <ListSelector onSelected={handleListSelection} />}
+      { currentList && <WordLister
+        wordList={currentList}
+        onListComplete={handleListComplete}
+      /> }
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

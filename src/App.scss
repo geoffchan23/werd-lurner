@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Poor+Story&display=swap');
+
+.App {
+  width: 100%;
+  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  min-height: 600px;
+  position: relative;
+}
+
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+button, input {
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Worder Component Styles */
+
+.Worder {
+  display: flex;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+
+  .content {
+    @include absolute-center();
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 50vw;
+  }
+
+  img.word-img {
+    max-width: 100%;
+    max-width: 100%;
+  }
+
+  .lines {
+    display: flex;
+    min-height: 6.5vw;
+    margin-bottom: 3em;
+  
+    > span {
+      min-width: 5vw;
+      border-bottom: 4px solid darken(burlywood, 30%);
+      display: block;
+      margin-right: 10px;
+      text-align: center;
+      font-size: 5vw;
+      text-transform: uppercase;
+      font-family: 'Poor Story', cursive;
+  
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .letters {
+    display: flex;
+    font-size: 4vw;
+    text-transform: uppercase;
+    width: 50vw;
+    justify-content: center;
+
+    .letter {
+      width: 5vw;
+      height: 5vw;
+      border-radius: 100%;
+      background-color: lighten(burlywood, 15%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      transition: all .3s;
+      user-select: none;
+      font-family: 'Poor Story', cursive;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+      &:active {
+        transform: scale(1);
+      }
+      &.selected {
+        opacity: .4;
+        transform: scale(1) !important; 
+      }
+    }
+  }
+}
+
+/* WordLister Component Styles */
+
+.WordLister {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    width: min-content;
+    transition: transform .5s;
+  }
+
+  button.nextWord {
+    @include absolute-center();
+    font-family: 'Poor Story', cursive;
+    border: none;
+    background-color: transparent;
+    font-size: 5em;
+    left: 80%;
+    width: 10vw;
+
+    img {
+      width: 100%;
+    }
+  }
+}
+
+/* ListSelector Component Styles */
+
+.ListSelector {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    font-family: 'Poor Story', cursive;
+    font-size: 5em;
+  }
+
+  .lists-container {
+    display: flex;
+
+    > div.list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      img {
+        max-width: 100%;
+        max-height: 80%;
+        border-radius: 100%;
+      }
+      h3 {
+        margin: 10px 0 0;
+        font-weight: normal;
+      }
+    }
+
+    > * {
+      border: 1px solid rgba(0,0,0,0.2);
+      border-radius: 15px;
+      height: 150px;
+      width: 150px;
+      padding: 15px 20px 20px;
+      margin-right: 15px;
+      transition: all .3s;
+      cursor: pointer;
+      
+      &:last-child {
+        margin-right: 0;
+      }
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    > div.add-list-btn-container {
+      button {
+        height: 100%;
+        width: 100%;
+        font-family: 'Poor Story', cursive;
+        border: none;
+        background-color: transparent;
+        font-size: 2em;
+      }
+    }
+  }
+
+  .add-list-container {
+    display: flex;
+    width: 100%;
+
+    .list-preview {
+      width: 30%;
+      padding-left: 40px;
+    }
+
+    .word-adder {
+      width: 70%;
+      padding-left: 40px;
+      
+      button {
+        border: 1px solid rgba(0,0,0,0.2);
+        background-color: transparent;
+        padding: 12px 18px;
+        border-radius: 10px;
+        font-family: 'Poor Story', cursive;
+        font-size: 2em;
+        margin-left: 10px;
+        background-color: lighten(cadetblue, 30%);
+
+        &:hover {
+          background-color: lighten(cadetblue, 10%);
+        }
+      }
+    }
+
+    input {
+      font-size: 2em;
+      border: none;
+      border-bottom: 1px solid rgba(0,0,0,0.2);
+      padding: 12px 18px;
+    }
+  }
+}
+
+
+@keyframes bounce-7 {
+  0%   { transform: scale(1,1)      translateY(0); }
+  10%  { transform: scale(1.1,.9)   translateY(0); }
+  30%  { transform: scale(.9,1.1)   translateY(-100px); }
+  50%  { transform: scale(1.05,.95) translateY(0); }
+  57%  { transform: scale(1,1)      translateY(-7px); }
+  64%  { transform: scale(1,1)      translateY(0); }
+  100% { transform: scale(1,1)      translateY(0); }
+}
