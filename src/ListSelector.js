@@ -1,27 +1,22 @@
-import React, { useState } from 'react'
-
-const importedLists = [{
-  name: 'Easy words',
-  list: [
-    { value: 'cat', img: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/ed/Nyan_cat_250px_frame.PNG/220px-Nyan_cat_250px_frame.PNG' },
-    { value: 'dog', img: 'https://static01.nyt.com/images/2019/06/17/science/17DOGS/17DOGS-superJumbo.jpg' },
-    { value: 'poo', img: 'https://dazedimg-dazedgroup.netdna-ssl.com/1000/azure/dazed-prod/1120/0/1120288.jpg' },
-  ]
-}]
+import React, { useState, useRef, useEffect } from 'react'
+import Arrow from './images/arrow-clip-art-trendy-6.png'
 
 const newListInitialState = {name: '', list: []}
 const newListItemInitialState = {value: '', img: ''}
 
 export default function ListSelector({
   onSelected,
-
+  list,
+  onNewListCreated,
 }) {
-  const [myLists, setMyLists] = useState(importedLists)
   const [addListMode, setAddListMode] = useState(false)
   const [newList, setNewList] = useState(newListInitialState)
   const [newListItem, setNewListItem] = useState(newListItemInitialState)
   const [imgResults, setImgResults] = useState([])
   const [showImageSearch, setShowImageSearch] = useState(false)
+  const listNameInput = useRef(null)
+  const newWordInput = useRef(null)
+  const newWordURLInput = useRef(null)
 
   function findImage() {
     (async function() {
@@ -31,14 +26,32 @@ export default function ListSelector({
   }
 
   function addWord() {
+    const newNewList = {...newList}
+    newNewList.list.push(newListItem)
+    setNewList(newNewList)
+    setNewListItem(newListItemInitialState)
+    newWordInput.current.select()
+  }
 
+  function deleteWord(index) {
+    let newNewList = {...newList}
+    newNewList.list = newNewList.list.filter((l, i) => i !== index)
+    setNewList(newNewList)
+  }
+
+  function handleNewListCreated() {
+    newListInitialState.list = []
+    setNewList(newListInitialState)
+    setNewListItem(newListItemInitialState)
+    onNewListCreated(newList)
+    setAddListMode(false)
   }
 
   return (<div className='ListSelector'>
     <h2>{addListMode ? 'Create' : 'Select'} a Word List</h2>
     { !addListMode && <div className='lists-container'>
-      { myLists.length && myLists.map((wordList, index) => (
-        <div className='list' onClick={() => onSelected(wordList)}>
+      { list.length && list.map((wordList, index) => (
+        <div className='list' onClick={() => onSelected(wordList)} key={JSON.stringify(wordList)}>
           <img src={wordList.list[0].img} alt={wordList.list[0].value} />
           <h3>{ wordList.name }</h3>
         </div>
@@ -51,33 +64,53 @@ export default function ListSelector({
     </div> }
 
     { addListMode && <div className='add-list-container'>
-      <div className='list-preview'>
-        <input value={newList.name} onChange={(e) => setNewList({...newList, name: e.target.value})} placeholder='Give the list a name' />
-        
-        <li>
+      { addListMode && <button className='back-btn' onClick={() => setAddListMode(false)}>
+        <span>Back</span>
+        <img src={Arrow} alt='arrow' />
+      </button> }
+
+      { newList.list.length !== 0 && <button className='create-btn' onClick={handleNewListCreated}>
+        <span>Create</span>
+        <img src={Arrow} alt='arrow' />
+      </button> }
+
+      <input 
+        value={newList.name} 
+        onChange={(e) => setNewList({...newList, name: e.target.value})} 
+        onKeyPress={(e) => (e.key === 'Enter' && newWordInput.current.select())}
+        placeholder='Give the list a name' 
+      />
+      
+      <ul className='list-preview'>
+        <li className='item-adder'>
           <input 
             value={newListItem.value} 
             onChange={(e) => setNewListItem({...newListItem, value: e.target.value})} 
             placeholder='Add a new word'
-            onKeyPress={(e) => (e.key === 'Enter' && findImage())}
+            onKeyPress={(e) => (e.key === 'Enter' && newWordURLInput.current.select())}
+            ref={newWordInput}
           />
           <input 
-            value={newListItem.value} 
-            onChange={(e) => setNewListItem({...newListItem, value: e.target.value})} 
+            value={newListItem.img} 
+            onChange={(e) => setNewListItem({...newListItem, img: e.target.value})} 
             placeholder='Image URL'
-            onKeyPress={(e) => (e.key === 'Enter' && findImage())}
+            onKeyPress={(e) => (e.key === 'Enter' && addWord())}
+            ref={newWordURLInput}
           />
-          <button onClick={addWord}>Add</button>
-          <button onClick={() => setShowImageSearch(true)}>Search Images</button>
+          <div className='action-btns'>
+            <button onClick={() => setShowImageSearch(true)}>Search Images</button>
+            <button onClick={addWord}>Add</button>
+          </div>
         </li>
 
-        { newList.list.length !== 0 && newList.list.map(listItem => (
-          <li>
-            <span>{ listItem.value }</span>
+        { newList.list.length !== 0 && newList.list.map((listItem, index) => (
+          <li key={JSON.stringify(listItem)}>
+            <span><span className='number'>{index+1}</span> {listItem.value}</span>
             <img src={listItem.img} alt={listItem.value} />
+            <button className='delete' onClick={() => deleteWord(index)}>x</button>
           </li>
         ))}
-      </div>
+      </ul>
 
       {/* <div className='image-search'>
         <div className='image-results'>

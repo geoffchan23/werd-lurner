@@ -16,6 +16,10 @@
   transform: translate(-50%, -50%);
 }
 
+@mixin font-family {
+  font-family: 'Poor Story', cursive;
+}
+
 button, input {
   outline: none;
 }
@@ -58,7 +62,7 @@ button {
       text-align: center;
       font-size: 5vw;
       text-transform: uppercase;
-      font-family: 'Poor Story', cursive;
+      @include font-family;
   
       &:last-child {
         margin-right: 0;
@@ -84,7 +88,7 @@ button {
       margin-right: 15px;
       transition: all .3s;
       user-select: none;
-      font-family: 'Poor Story', cursive;
+      @include font-family;
 
       &:hover {
         transform: scale(1.2);
@@ -116,7 +120,7 @@ button {
 
   button.nextWord {
     @include absolute-center();
-    font-family: 'Poor Story', cursive;
+    @include font-family;
     border: none;
     background-color: transparent;
     font-size: 5em;
@@ -138,7 +142,7 @@ button {
   align-items: center;
 
   h2 {
-    font-family: 'Poor Story', cursive;
+    @include font-family;
     font-size: 5em;
   }
 
@@ -183,7 +187,7 @@ button {
       button {
         height: 100%;
         width: 100%;
-        font-family: 'Poor Story', cursive;
+        @include font-family;
         border: none;
         background-color: transparent;
         font-size: 2em;
@@ -194,37 +198,183 @@ button {
   .add-list-container {
     display: flex;
     width: 100%;
+    align-items: center;
+    flex-direction: column;
 
-    .list-preview {
-      width: 30%;
-      padding-left: 40px;
+    button.back-btn, button.create-btn {
+      border: none;
+      background-color: transparent;
+      position: absolute;
+      left: 2em;
+      top: 210px;
+      width: 150px;
+
+      @media only screen and (max-width: 960px) {
+        width: 100px;
+        top: 230px;
+      }
+
+      span {
+        @include absolute-center();
+        font-size: 1.5em;
+        left: 55%;
+        top: 47%;
+        font-weight: bold;
+        @include font-family();
+        color: white;
+        text-shadow: 1px 1px 0px black;
+        letter-spacing: 1px;
+        z-index: 2;
+      }
+
+      img {
+        width: 100%;
+        transform: scaleX(-1);
+        position: relative;
+        z-index: 1;
+      }
     }
 
-    .word-adder {
-      width: 70%;
-      padding-left: 40px;
+    button.create-btn {
+      left: initial;
+      right: 2em;
       
-      button {
-        border: 1px solid rgba(0,0,0,0.2);
-        background-color: transparent;
-        padding: 12px 18px;
-        border-radius: 10px;
-        font-family: 'Poor Story', cursive;
-        font-size: 2em;
-        margin-left: 10px;
-        background-color: lighten(cadetblue, 30%);
+      span {
+        left: 45%;
+      }
+      img {
+        transform: scaleX(1);
+      }
+    }
 
-        &:hover {
-          background-color: lighten(cadetblue, 10%);
-        }
+    @mixin form-width {
+      width: 80%;
+      max-width: 600px;
+      min-width: 384px;
+
+      @media only screen and (max-width: 960px) {
+        width: 50%;
       }
     }
 
     input {
       font-size: 2em;
       border: none;
-      border-bottom: 1px solid rgba(0,0,0,0.2);
+      border-bottom: 2px solid rgba(0,0,0,0.3);
       padding: 12px 18px;
+      box-sizing: border-box;
+      background-color: lighten(cadetblue, 41%);
+      border-radius: 10px;
+      @include form-width();
+      min-width: 0;
+    }
+
+    ul.list-preview {
+      @include form-width();
+      box-sizing: border-box;
+      padding: 40px;
+      border: 1px solid rgba(0,0,0,0.2);
+      border-radius: 15px;
+      
+      li.item-adder {
+        display: flex;
+        flex-direction: column;
+
+        input {
+          width: 100%;
+          border-bottom: 1px solid rgba(0,0,0,0.2);
+          margin-bottom: 10px;
+          font-size: 1em;
+        }
+
+        .action-btns {
+          display: flex;
+          justify-content: space-between;;
+        }
+
+        button {
+          border: 1px solid rgba(0,0,0,0.2);
+          background-color: transparent;
+          padding: 12px 18px;
+          border-radius: 10px;
+          @include font-family;
+          font-size: 2em;
+          margin-right: 10px;
+          background-color: lighten(cadetblue, 30%);
+    
+          &:hover {
+            background-color: lighten(cadetblue, 10%);
+          }
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+
+      li:not(.item-adder) {
+        display: flex;
+        flex-direction: row;
+        background-color: rgba(0,0,0,0.1);
+        margin-top: 1em;
+        overflow: auto;
+        padding: 20px;
+        border-radius: 10px;
+        position: relative;
+        align-items: center;
+        overflow: hidden;
+
+        span {
+          font-size: 2em;
+          display: flex;
+          color: rgba(0,0,0,0.7);
+
+          span {
+            font-size: .75em;
+            background-color: transparent;
+            border-radius: 100%;
+            border: 2px solid rgba(0,0,0,0.5);
+            height: 1.75em;
+            width: 1.75em;
+            display: block;
+            text-align: center;
+            line-height: 1.75em;
+            margin-right: 15px;
+            font-weight: bold;
+          }
+        }
+
+        img {
+          margin-left: auto;
+          max-width: 100%;
+          max-height: 60px;
+          transition: all .5s;
+          transform: translateX(0%);
+        }
+
+        button.delete {
+          font-size: 2em;
+          color: darken(red, 20%);
+          border: none;
+          background-color: transparent;
+          text-transform: uppercase;
+          font-weight: bold;
+          transition: all .5s;
+          opacity: 0;
+          transform: translateX(100%);
+          position: absolute;
+          right: 20px;
+        }
+
+        &:hover {
+          img {
+            transform: translateX(-50%);
+          }
+          button.delete {
+            transform: translateX(0%);
+            opacity: 1;
+          }
+        }
+      }
     }
   }
 }
