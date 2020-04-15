@@ -50,7 +50,7 @@ export default function ListSelector({
   return (<div className='ListSelector'>
     <h2>{addListMode ? 'Create' : 'Select'} a Word List</h2>
     { !addListMode && <div className='lists-container'>
-      { list.length && list.map((wordList, index) => (
+      { list.length !== 0 && list.map((wordList, index) => (
         <div className='list' onClick={() => onSelected(wordList)} key={JSON.stringify(wordList)}>
           <img src={wordList.list[0].img} alt={wordList.list[0].value} />
           <h3>{ wordList.name }</h3>

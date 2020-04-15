@@ -2,6 +2,17 @@ import React, { useState } from 'react'
 import WordLister from './WordLister'
 import ListSelector from './ListSelector'
 import './App.scss'
+//https://www.npmjs.com/package/bad-words
+
+const useStateWithLocalStorage = localStorageKey => {
+  const [value, setValue] = React.useState(
+    JSON.parse(localStorage.getItem(localStorageKey)) || []
+  );
+  React.useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(value));
+  }, [localStorageKey, value]);
+  return [value, setValue];
+};
 
 const importedLists = [{
   name: 'Easy words',
@@ -13,7 +24,7 @@ const importedLists = [{
 }]
 
 function App() {
-  const [myLists, setMyLists] = useState(importedLists)
+  const [myLists, setMyLists] = useStateWithLocalStorage('myLists')
   const [currentList, setCurrentList] = useState(undefined)
 
   function handleListComplete() {
